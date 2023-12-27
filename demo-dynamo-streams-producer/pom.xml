@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.example</groupId>
 		<artifactId>demo-outbox-pattern</artifactId>
-		<version>1.0-SNAPSHOT</version>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>demo-dynamo-streams-producer</artifactId>
@@ -47,6 +47,13 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>build-image</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

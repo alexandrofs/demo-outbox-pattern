@@ -2,9 +2,16 @@ name: Build and Deploy Docker Image
 
 on: [push]
 
+env:
+  REGISTRY: ghcr.io
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Checkout repository
@@ -14,9 +21,17 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
+          distribution: 'adopt'
 
       - name: Build with Maven
-        run: mvn clean package
+        run: mvn clean install -DskipTests
 
-      - name: Build Docker image
-        run: mvn spring-boot:build-image -DskipTests -pl '!demo-domain'
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Docker image
+        run:  mvn clean package -DskipTests -DskipDocker=false -Ddocker.publishRegistry.url=ghcr.io -Dspring-boot.build-image.publish=true -Ddocker.publishRegistry.username='${{ github.actor }}' -Ddocker.publishRegistry.token='${{ secrets.GITHUB_TOKEN }}'
