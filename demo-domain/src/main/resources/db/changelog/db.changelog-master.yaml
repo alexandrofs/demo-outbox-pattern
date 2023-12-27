@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-outbox-table
+      author: alexandrofs
+      changes:
+        - createTable:
+            tableName: TB_OUTBOX_TABLE
+            columns:
+              - column:
+                  name: ID
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: MESSAGE
+                  type: varchar(255)
+              - column:
+                  name: QUEUE_NAME
+                  type: varchar(255)
+              - column:
+                  name: CREATED_TIMESTAMP
+                  type: bigint
+        - createTable:
+            tableName: TB_ORDER
+            columns:
+              - column:
+                  name: ID
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: STATUS
+                  type: varchar(20)
+              - column:
+                  name: TOTAL_AMOUNT
+                  type: number
